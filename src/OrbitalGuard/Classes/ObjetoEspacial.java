@@ -44,11 +44,16 @@ public abstract class ObjetoEspacial implements StatusRelatorio {
 
 
     public String gerarRelatorioStatus() {
-        return "Nome: " + nomeObjeto +
-                "\nNORAD: " + idNorad +
-                "\nTipo: " + getTipoObjeto() +
-                "\nAltitude: " + altitudeKm +
-                "\nVelocidade: " + velocidadeKmS +
-                "\nRisco: " + calcularRiscoColisao() + "%";
+        String aux = "";
+        aux += "🛰️ OBJETO ESPACIAL\n";
+        aux += "━━━━━━━━━━━━━━━━━━━━\n";
+        aux += "Nome: " + nomeObjeto + "\n";
+        aux += "NORAD: " + idNorad + "\n";
+        aux += "Tipo: " + getTipoObjeto() + "\n";
+        aux += "Altitude: " + altitudeKm + " km\n";
+        aux += "Velocidade: " + velocidadeKmS + " km/s\n";
+        aux += "Risco de colisão: " + calcularRiscoColisao() + "%\n";
+        aux += "━━━━━━━━━━━━━━━━━━━━";
+        return aux;
     }
 }

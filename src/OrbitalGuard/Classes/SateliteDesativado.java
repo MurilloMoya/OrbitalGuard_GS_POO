@@ -13,12 +13,12 @@ public class SateliteDesativado extends ObjetoEspacial implements Manobravel {
         this.pesoKg = pesoKg;
     }
 
-    public double calcularAutonomiaOperacional() {
-        double autonomia = 100 - (anosInativo * 5) - (pesoKg * 0.05);
-        if (autonomia < 0) {
-            autonomia = 0;
+    public double calcularVidaUtil() {
+        double vidaUtil = 100 - (anosInativo * 5) - (pesoKg * 0.05);
+        if (vidaUtil < 0) {
+            vidaUtil = 0;
         }
-        return autonomia;
+        return vidaUtil;
     }
 
 

@@ -14,19 +14,25 @@ public class EstagioFogueteAbandonado extends ObjetoEspacial implements Manobrav
     }
 
     public double calcularRiscoReentrada() {
-        double risco = (massaKg / 10) + (tamanhoM2 * 2);
-        if (risco > 100) {
-            risco = 100;
-        }
-        return risco;
-    }
+        double riscoReentrada;
 
-    public double calcularRiscoColisao() {
-        double risco = (massaKg / 10) + (tamanhoM2 * 4) + 30;
-        if (risco > 100) {
-            risco = 100;
+        riscoReentrada= (massaKg / 10) + (tamanhoM2 * 2);
+
+        if (riscoReentrada > 100) {
+            riscoReentrada = 100;
         }
-        return risco;
+
+        return riscoReentrada;
+    }
+    public double calcularRiscoColisao() {
+        double riscoColisao;
+
+        riscoColisao = (massaKg / 10) + (tamanhoM2 * 4) + 30;
+
+        if (riscoColisao > 100) {
+            riscoColisao = 100;
+        }
+        return riscoColisao;
     }
 
     public double combustivelDisponivel() {

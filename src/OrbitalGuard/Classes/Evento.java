@@ -33,11 +33,13 @@ public class Evento implements StatusRelatorio {
     }
 
     public String gerarRelatorioStatus() {
-        return "Evento: " + tipo +
-                "\nDescrição: " + descricao +
-                "\nData: " + data +
-                "\nHora: " + hora +
-                "\nNORAD: " + idNoradObjeto +
-                "\nGravidade: " + gravidade;
+        String aux = "";
+        aux += "Evento: " + tipo + "\n";
+        aux += "Descrição: " + descricao + "\n";
+        aux += "Data: " + data + "\n";
+        aux += "Hora: " + hora + "\n";
+        aux += "NORAD: " + idNoradObjeto + "\n";
+        aux += "Gravidade: " + gravidade;
+        return aux;
     }
 }

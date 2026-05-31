@@ -6,6 +6,7 @@ import OrbitalGuard.Interfaces.Manobravel;
 import static javax.swing.JOptionPane.*;
 import static java.lang.Integer.parseInt;
 import static java.lang.Double.parseDouble;
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 public class Util {
@@ -89,9 +90,10 @@ public class Util {
     private void listarObjetos() {
         String lista = "";
         int num = 1;
+        double riscoExibicao;
 
         for (ObjetoEspacial obj : objetos) {
-            double riscoExibicao = obj.calcularRiscoColisao();
+            riscoExibicao = obj.calcularRiscoColisao();
             lista += "---- Objeto " + num + " ----\n";
             lista += "Tipo: " + obj.getTipoObjeto() + "\n";
             lista += "Nome: " + obj.getNomeObjeto() + "\n";
@@ -109,24 +111,31 @@ public class Util {
     }
 
     private void calcularPorEntidade() {
-
+        String info;
         int id = parseInt(showInputDialog("Digite o ID NORAD:"));
 
         for (ObjetoEspacial obj : objetos) {
             if (obj.getIdNorad() == id) {
 
-                String info = obj.gerarRelatorioStatus();
+                info = obj.gerarRelatorioStatus();
 
                 if (obj instanceof SateliteDesativado sat) {
-                    info += "\n\nVida útil estimada restante: " + sat.calcularAutonomiaOperacional() + "%";
+                    info += "\n\n📊 ANÁLISE DO SATÉLITE\n";
+                    info += "━━━━━━━━━━━━━━━━━━━━\n";
+                    info += "Vida útil estimada restante: " + sat.calcularVidaUtil() + "%\n";
+                    info += "━━━━━━━━━━━━━━━━━━━━";
                 } else if (obj instanceof EstagioFogueteAbandonado est) {
-                    info += "\n\nRisco de reentrada: " + est.calcularRiscoReentrada() + "%";
+                    info += "\n\n📊 ANÁLISE DO FOGUETE\n";
+                    info += "━━━━━━━━━━━━━━━━━━━━\n";
+                    info += "Risco de reentrada: " + est.calcularRiscoReentrada() + "%\n";
+                    info += "━━━━━━━━━━━━━━━━━━━━";
                 }
 
                 if (obj instanceof Manobravel m) {
-                    info += "\n\n--- Capacidade de Manobra ---";
-                    info += "\nCombustível: " + m.combustivelDisponivel() + " kg";
-                    info += "\nStatus: " + m.podeManobrar();
+                    info += "\n\n🚀 CAPACIDADE DE MANOBRA\n";
+                    info += "━━━━━━━━━━━━━━━━━━━━\n";
+                    info += "Combustível: " + m.combustivelDisponivel() + " kg\n";
+                    info += "Status: " + m.podeManobrar();
                 }
 
                 showMessageDialog(null, info);
@@ -138,18 +147,31 @@ public class Util {
     }
 
     private void registrarEvento() {
+        String tipo, descricao, data, hora="";
+        int id, gravidade;
+        boolean horaValida = false;
 
-        int id = parseInt(showInputDialog("Digite o ID NORAD do objeto:"));
+        id = parseInt(showInputDialog("Digite o ID NORAD do objeto:"));
 
         for (ObjetoEspacial obj : objetos) {
 
             if (obj.getIdNorad() == id) {
 
-                String tipo = showInputDialog("Tipo do evento:");
-                String descricao = showInputDialog("Descrição:");
-                String data = showInputDialog("Data (ex: 2025-01-15):");
-                String hora = showInputDialog("Hora (ex: 10:30):");
-                int gravidade = parseInt(showInputDialog("Gravidade (1 a 5):"));
+                tipo = showInputDialog("Tipo do evento:");
+                descricao = showInputDialog("Descrição:");
+                data = showInputDialog("Data (ex: 15/01/2026):");
+
+                while (!horaValida) {
+                    hora = showInputDialog("Hora (ex: 10:30):");
+                    try {
+                        LocalTime.parse(hora);
+                        horaValida = true;
+                    } catch (Exception e) {
+                        showMessageDialog(null, "Hora inválida! Use o formato 10:30");
+                    }
+                }
+
+                gravidade = parseInt(showInputDialog("Gravidade (1 a 5):"));
 
                 if (gravidade < 1 || gravidade > 5) {
                     showMessageDialog(null, "Gravidade inválida.");
@@ -186,9 +208,9 @@ public class Util {
 
     private void calcularIPO() {
         int quantidade = 0;
-        double somaRisco = 0;
+        double somaRisco = 0, riscoMedio = 0, ipo;
         int eventosCriticos = 0;
-        double riscoMedio = 0;
+        String cor;
 
         for (ObjetoEspacial obj : objetos) {
             somaRisco += obj.calcularRiscoColisao();
@@ -205,8 +227,8 @@ public class Util {
             riscoMedio = somaRisco / quantidade;
         }
 
-        double ipo = CalculadoraIPO.calcularIPO(riscoMedio, quantidade, eventosCriticos);
-        String cor = CalculadoraIPO.classificarIPO(ipo);
+        ipo = CalculadoraIPO.calcularIPO(riscoMedio, quantidade, eventosCriticos);
+        cor = CalculadoraIPO.classificarIPO(ipo);
 
         showMessageDialog(null,
                 "IPO: " + ipo +
@@ -217,15 +239,9 @@ public class Util {
     }
 
     private void relatorioGeral() {
-
         String relatorio = "";
-        int totalObjetos = 0;
-        int satelites = 0;
-        int estagiosAbandonados = 0;
-        int totalEventos = 0;
-        int eventosCriticos = 0;
-        double riscoMedio = 0;
-        double somaRisco = 0;
+        int totalObjetos = 0, satelites = 0, estagiosAbandonados = 0, totalEventos = 0, eventosCriticos = 0;
+        double riscoMedio = 0, somaRisco = 0;
 
         for (ObjetoEspacial obj : objetos) {
             somaRisco += obj.calcularRiscoColisao();
