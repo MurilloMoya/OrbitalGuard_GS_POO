@@ -241,7 +241,7 @@ public class Util {
     private void relatorioGeral() {
         String relatorio = "";
         int totalObjetos = 0, satelites = 0, estagiosAbandonados = 0, totalEventos = 0, eventosCriticos = 0;
-        double riscoMedio = 0, somaRisco = 0;
+        double riscoMedio = 0, somaRisco = 0,ipo;
 
         for (ObjetoEspacial obj : objetos) {
             somaRisco += obj.calcularRiscoColisao();
@@ -265,13 +265,14 @@ public class Util {
             riscoMedio = somaRisco / totalObjetos;
         }
 
-        double ipo = CalculadoraIPO.calcularIPO(riscoMedio, totalObjetos, eventosCriticos);
+        ipo = CalculadoraIPO.calcularIPO(riscoMedio, totalObjetos, eventosCriticos);
 
         relatorio += "===== RELATÓRIO GERAL =====\n";
         relatorio += "Total de objetos: " + totalObjetos + "\n";
         relatorio += "Satélites desativados: " + satelites + "\n";
         relatorio += "Estágios abandonados: " + estagiosAbandonados + "\n";
         relatorio += "Eventos registrados: " + totalEventos + "\n";
+        relatorio += "Eventos críticos: " + eventosCriticos + "\n";
         relatorio += "IPO: " + ipo + "\n";
         relatorio += "Classificação: " + CalculadoraIPO.classificarIPO(ipo);
 
