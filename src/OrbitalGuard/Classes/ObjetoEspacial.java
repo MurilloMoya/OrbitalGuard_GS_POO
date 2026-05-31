@@ -49,6 +49,6 @@ public abstract class ObjetoEspacial implements StatusRelatorio {
                 "\nTipo: " + getTipoObjeto() +
                 "\nAltitude: " + altitudeKm +
                 "\nVelocidade: " + velocidadeKmS +
-                "\nRisco: " + calcularRiscoColisao();
+                "\nRisco: " + calcularRiscoColisao() + "%";
     }
 }

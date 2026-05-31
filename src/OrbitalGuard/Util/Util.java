@@ -14,10 +14,10 @@ public class Util {
     private ArrayList<Evento> eventos = new ArrayList<>();
 
     public void menu() {
-        int opcao;
+        int opcao = 0;
         String menu;
         do {
-            menu  = "OrbitalGuard Brasil\n";
+            menu  = "OrbitalGuard\n";
             menu += "[1] Cadastrar objeto\n";
             menu += "[2] Listar objetos\n";
             menu += "[3] Calcular por entidade\n";
@@ -27,58 +27,59 @@ public class Util {
             menu += "[7] Relatório geral\n";
             menu += "[8] Sair\n";
 
-            opcao = parseInt(showInputDialog(menu));
-
-            switch (opcao) {
-                case 1 -> cadastrarObjeto();
-                case 2 -> listarObjetos();
-                case 3 -> calcularPorEntidade();
-                case 4 -> registrarEvento();
-                case 5 -> listarEventos();
-                case 6 -> calcularIPO();
-                case 7 -> relatorioGeral();
-                case 8 -> showMessageDialog(null, "Sistema encerrado.");
-                default -> showMessageDialog(null, "Opção inválida.");
+            try {
+                opcao = parseInt(showInputDialog(menu));
+                switch (opcao) {
+                    case 1 -> cadastrarObjeto();
+                    case 2 -> listarObjetos();
+                    case 3 -> calcularPorEntidade();
+                    case 4 -> registrarEvento();
+                    case 5 -> listarEventos();
+                    case 6 -> calcularIPO();
+                    case 7 -> relatorioGeral();
+                    case 8 -> showMessageDialog(null, "Sistema encerrado.");
+                    default -> showMessageDialog(null, "Opção inválida.");
+                }
+            } catch (NumberFormatException e) {
+                showMessageDialog(null, "A opção deve ser um número\n" + e);
             }
 
         } while (opcao != 8);
     }
 
     private void cadastrarObjeto() {
-        String nome,nomeOrg,pais,sigla;
-        int tipo,idNorad,anosAbandono,idade;
-        double altitude,velocidade,massa,combustivel;
+        String nome, nomeOrg, pais;
+        int tipo, idNorad, anosInativo;
+        double altitude, velocidade, massa, pesoKg, tamanhoM2;
 
-        tipo = parseInt(showInputDialog("Escolha o tipo do objeto:\n1 - Satélite Ativo\n2 - Estágio de Foguete Abandonado"));
+        tipo = parseInt(showInputDialog("Escolha o tipo do objeto:\n1 - Satélite Desativado\n2 - Estágio de Foguete Abandonado"));
 
         while (tipo != 1 && tipo != 2) {
             tipo = parseInt(showInputDialog("Opção inválida!\nDigite 1 ou 2:"));
         }
 
-        idNorad= parseInt(showInputDialog("ID NORAD (número):"));
+        idNorad = parseInt(showInputDialog("ID NORAD (número):"));
         nome = showInputDialog("Nome do objeto:");
         altitude = parseDouble(showInputDialog("Altitude (km):"));
-        velocidade= parseDouble(showInputDialog("Velocidade (km/s):"));
-        nomeOrg= showInputDialog("Nome da organização:");
-        pais= showInputDialog("País:");
-        sigla= showInputDialog("Sigla da organização:");
+        velocidade = parseDouble(showInputDialog("Velocidade (km/s):"));
+        nomeOrg = showInputDialog("Nome da organização:");
+        pais = showInputDialog("País:");
 
-        Organizacao org = new Organizacao(nomeOrg, pais, sigla);
+        Organizacao org = new Organizacao(nomeOrg, pais);
 
         if (tipo == 1) {
-            combustivel= parseDouble(showInputDialog("Combustível (kg):"));
-            idade= parseInt(showInputDialog("Idade (anos):"));
+            anosInativo = parseInt(showInputDialog("Anos inativo:"));
+            pesoKg = parseDouble(showInputDialog("Peso do satélite (kg):"));
 
-            SateliteAtivo satelite = new SateliteAtivo(idNorad, nome, altitude, velocidade, org, combustivel, idade);
+            SateliteDesativado satelite = new SateliteDesativado(idNorad, nome, altitude, velocidade, org, anosInativo, pesoKg);
             objetos.add(satelite);
 
-            showMessageDialog(null, "Satélite ativo cadastrado com sucesso!");
-
+            showMessageDialog(null, "Satélite desativado cadastrado com sucesso!");
         } else {
-            massa= parseDouble(showInputDialog("Massa (kg):"));
-            anosAbandono = parseInt(showInputDialog("Anos abandonado:"));
+            massa = parseDouble(showInputDialog("Massa (kg):"));
+            tamanhoM2 = parseDouble(showInputDialog("Tamanho (m²):"));
 
-            EstagioFogueteAbandonado estagio = new EstagioFogueteAbandonado(idNorad, nome, altitude, velocidade, org, anosAbandono, massa);
+            EstagioFogueteAbandonado estagio = new EstagioFogueteAbandonado(idNorad, nome, altitude, velocidade, org, massa, tamanhoM2);
             objetos.add(estagio);
 
             showMessageDialog(null, "Estágio de foguete cadastrado com sucesso!");
@@ -90,12 +91,13 @@ public class Util {
         int num = 1;
 
         for (ObjetoEspacial obj : objetos) {
+            double riscoExibicao = obj.calcularRiscoColisao();
             lista += "---- Objeto " + num + " ----\n";
             lista += "Tipo: " + obj.getTipoObjeto() + "\n";
             lista += "Nome: " + obj.getNomeObjeto() + "\n";
             lista += "ID NORAD: " + obj.getIdNorad() + "\n";
             lista += "Altitude: " + obj.getAltitudeKm() + " km\n";
-            lista += "Risco colisão: " + String.format("%.2f", obj.calcularRiscoColisao()) + "\n\n";
+            lista += "Risco colisão: " + riscoExibicao + "%\n\n";
             num++;
         }
 
@@ -115,16 +117,16 @@ public class Util {
 
                 String info = obj.gerarRelatorioStatus();
 
-                if (obj instanceof SateliteAtivo sat) {
-                    info += "\n\nAutonomia operacional: " + String.format("%.2f", sat.calcularAutonomiaOperacional());
+                if (obj instanceof SateliteDesativado sat) {
+                    info += "\n\nVida útil estimada restante: " + sat.calcularAutonomiaOperacional() + "%";
                 } else if (obj instanceof EstagioFogueteAbandonado est) {
-                    info += "\n\nRisco de reentrada: " + String.format("%.2f", est.calcularRiscoReentrada());
+                    info += "\n\nRisco de reentrada: " + est.calcularRiscoReentrada() + "%";
                 }
 
                 if (obj instanceof Manobravel m) {
                     info += "\n\n--- Capacidade de Manobra ---";
                     info += "\nCombustível: " + m.combustivelDisponivel() + " kg";
-                    info += "\nPode manobrar: " + m.podeManobrar();
+                    info += "\nStatus: " + m.podeManobrar();
                 }
 
                 showMessageDialog(null, info);
@@ -145,7 +147,8 @@ public class Util {
 
                 String tipo = showInputDialog("Tipo do evento:");
                 String descricao = showInputDialog("Descrição:");
-                String data = showInputDialog("Data/Hora:");
+                String data = showInputDialog("Data (ex: 2025-01-15):");
+                String hora = showInputDialog("Hora (ex: 10:30):");
                 int gravidade = parseInt(showInputDialog("Gravidade (1 a 5):"));
 
                 if (gravidade < 1 || gravidade > 5) {
@@ -153,7 +156,7 @@ public class Util {
                     return;
                 }
 
-                Evento evento = new Evento(tipo, descricao, data, id, gravidade);
+                Evento evento = new Evento(data, descricao, gravidade, hora, id, tipo);
                 eventos.add(evento);
 
                 showMessageDialog(null, "Evento registrado com sucesso.");
@@ -166,15 +169,15 @@ public class Util {
 
     private void listarEventos() {
         String lista = "";
-        int contador = 1;
+        int cont = 1;
 
         for (Evento ev : eventos) {
-            lista += "---- Evento " + contador + " ----\n";
-            lista += ev.toString() + "\n\n";
-            contador++;
+            lista += "---- Evento " + cont + " ----\n";
+            lista += ev.gerarRelatorioStatus() + "\n\n";
+            cont++;
         }
 
-        if (contador == 1) {
+        if (cont == 1) {
             showMessageDialog(null, "Nenhum evento registrado.");
         } else {
             showMessageDialog(null, lista);
@@ -182,7 +185,6 @@ public class Util {
     }
 
     private void calcularIPO() {
-
         int quantidade = 0;
         double somaRisco = 0;
         int eventosCriticos = 0;
@@ -207,7 +209,7 @@ public class Util {
         String cor = CalculadoraIPO.classificarIPO(ipo);
 
         showMessageDialog(null,
-                "IPO: " + String.format("%.1f", ipo) +
+                "IPO: " + ipo +
                         "\nClassificação: " + cor +
                         "\nObjetos: " + quantidade +
                         "\nEventos críticos: " + eventosCriticos
@@ -215,6 +217,7 @@ public class Util {
     }
 
     private void relatorioGeral() {
+
         String relatorio = "";
         int totalObjetos = 0;
         int satelites = 0;
@@ -227,26 +230,20 @@ public class Util {
         for (ObjetoEspacial obj : objetos) {
             somaRisco += obj.calcularRiscoColisao();
 
-            if (obj instanceof SateliteAtivo) {
+            if (obj instanceof SateliteDesativado) {
                 satelites++;
-            }
-
-            if (obj instanceof EstagioFogueteAbandonado) {
+            } else if (obj instanceof EstagioFogueteAbandonado) {
                 estagiosAbandonados++;
             }
             totalObjetos++;
         }
 
         for (Evento ev : eventos) {
-
             totalEventos++;
-
             if (ev.isCritico()) {
                 eventosCriticos++;
             }
         }
-
-
 
         if (totalObjetos > 0) {
             riscoMedio = somaRisco / totalObjetos;
@@ -254,13 +251,12 @@ public class Util {
 
         double ipo = CalculadoraIPO.calcularIPO(riscoMedio, totalObjetos, eventosCriticos);
 
-
         relatorio += "===== RELATÓRIO GERAL =====\n";
         relatorio += "Total de objetos: " + totalObjetos + "\n";
-        relatorio += "Satélites ativos: " + satelites + "\n";
+        relatorio += "Satélites desativados: " + satelites + "\n";
         relatorio += "Estágios abandonados: " + estagiosAbandonados + "\n";
         relatorio += "Eventos registrados: " + totalEventos + "\n";
-        relatorio += "IPO: " + String.format("%.1f", ipo) + "\n";
+        relatorio += "IPO: " + ipo + "\n";
         relatorio += "Classificação: " + CalculadoraIPO.classificarIPO(ipo);
 
         showMessageDialog(null, relatorio);

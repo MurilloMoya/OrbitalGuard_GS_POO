@@ -6,23 +6,24 @@ public class Evento implements StatusRelatorio {
 
     private String tipo;
     private String descricao;
-    private String dataHora;
+    private String data;
+    private String hora;
     private int idNoradObjeto;
     private int gravidade;
 
-    public Evento(String tipo, String descricao, String dataHora, int idNoradObjeto, int gravidade) {
-        this.tipo = tipo;
+    public Evento(String data, String descricao, int gravidade, String hora, int idNoradObjeto, String tipo) {
+        this.data = data;
         this.descricao = descricao;
-        this.dataHora = dataHora;
-        this.idNoradObjeto = idNoradObjeto;
         this.gravidade = gravidade;
+        this.hora = hora;
+        this.idNoradObjeto = idNoradObjeto;
+        this.tipo = tipo;
     }
 
-    //OLHAR
     public boolean isCritico() {
-        if (gravidade >= 4){
+        if (gravidade >= 4) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
@@ -31,17 +32,12 @@ public class Evento implements StatusRelatorio {
         return gravidade;
     }
 
-
     public String gerarRelatorioStatus() {
         return "Evento: " + tipo +
                 "\nDescrição: " + descricao +
-                "\nData: " + dataHora +
+                "\nData: " + data +
+                "\nHora: " + hora +
                 "\nNORAD: " + idNoradObjeto +
                 "\nGravidade: " + gravidade;
-    }
-
-
-    public String toString() {
-        return gerarRelatorioStatus();
     }
 }
