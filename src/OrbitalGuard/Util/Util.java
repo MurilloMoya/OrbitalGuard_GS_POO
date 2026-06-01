@@ -6,7 +6,9 @@ import OrbitalGuard.Interfaces.Manobravel;
 import static javax.swing.JOptionPane.*;
 import static java.lang.Integer.parseInt;
 import static java.lang.Double.parseDouble;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Util {
@@ -147,9 +149,10 @@ public class Util {
     }
 
     private void registrarEvento() {
-        String tipo, descricao, data, hora="";
+        String tipo, descricao, data = "", hora = "";
         int id, gravidade;
         boolean horaValida = false;
+        boolean dataValida = false;
 
         id = parseInt(showInputDialog("Digite o ID NORAD do objeto:"));
 
@@ -158,8 +161,25 @@ public class Util {
             if (obj.getIdNorad() == id) {
 
                 tipo = showInputDialog("Tipo do evento:");
+                while (tipo.equals("")) {
+                    tipo = showInputDialog("Tipo do evento não pode estar vazio!\nTipo do evento:");
+                }
+
                 descricao = showInputDialog("Descrição:");
-                data = showInputDialog("Data (ex: 15/01/2026):");
+                while (descricao.equals("")) {
+                    descricao = showInputDialog("Descrição não pode estar vazia!\nDescrição:");
+                }
+
+
+                while (!dataValida) {
+                    data = showInputDialog("Data (ex: 15/01/2026):");
+                    try {
+                       LocalDate.parse(data,DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                        dataValida = true;
+                    } catch (Exception e) {
+                        showMessageDialog(null, "Data inválida! Use o formato 15/01/2026");
+                    }
+                }
 
                 while (!horaValida) {
                     hora = showInputDialog("Hora (ex: 10:30):");
@@ -172,10 +192,9 @@ public class Util {
                 }
 
                 gravidade = parseInt(showInputDialog("Gravidade (1 a 5):"));
-
-                if (gravidade < 1 || gravidade > 5) {
-                    showMessageDialog(null, "Gravidade inválida.");
-                    return;
+                while (gravidade < 1 || gravidade > 5) {
+                    showMessageDialog(null, "Gravidade inválida! Digite entre 1 e 5:");
+                    gravidade = parseInt(showInputDialog("Gravidade (1 a 5):"));
                 }
 
                 Evento evento = new Evento(data, descricao, gravidade, hora, id, tipo);
@@ -207,9 +226,8 @@ public class Util {
     }
 
     private void calcularIPO() {
-        int quantidade = 0;
+        int quantidade = 0,eventosCriticos = 0;
         double somaRisco = 0, riscoMedio = 0, ipo;
-        int eventosCriticos = 0;
         String cor;
 
         for (ObjetoEspacial obj : objetos) {
