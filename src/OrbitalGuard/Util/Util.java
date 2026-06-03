@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 public class Util {
 
-    private ArrayList<ObjetoEspacial> objetos = new ArrayList<>();
-    private ArrayList<Evento> eventos = new ArrayList<>();
+    static private ArrayList<ObjetoEspacial> objetos = new ArrayList<>();
+    static private ArrayList<Evento> eventos = new ArrayList<>();
 
     public void menu() {
         int opcao = 0;
