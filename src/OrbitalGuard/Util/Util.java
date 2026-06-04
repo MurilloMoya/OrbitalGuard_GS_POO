@@ -64,7 +64,7 @@ public class Util {
         idNorad = parseInt(showInputDialog("ID NORAD (número):"));
         nome = showInputDialog("Nome do objeto:");
         altitude = parseDouble(showInputDialog("Altitude (km):"));
-        velocidade = parseDouble(showInputDialog("Velocidade (km/s):"));
+        velocidade = parseDouble(showInputDialog("Velocidade em orbita (km/s):"));
         nomeOrg = showInputDialog("Nome da organização:");
         pais = showInputDialog("País:");
 
