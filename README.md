@@ -1,14 +1,14 @@
 # 🛰️ OrbitalGuard
 
-> Sistema de monitoramento de detritos espaciais desenvolvido em Java com Programação Orientada a Objetos (POO).
+> Sistema em Java para monitoramento de detritos espaciais, desenvolvido com Programação Orientada a Objetos (POO).
 
 ## 📖 Sobre o Projeto
 
-Segundo agências espaciais internacionais, o aumento de satélites desativados e estágios de foguetes abandonados em órbita é um dos maiores riscos para futuras missões e operações orbitais.
+Satélites desativados e estágios de foguete abandonados continuam em órbita por décadas, e cada novo objeto inativo aumenta o risco de colisão para missões futuras.
 
-O **OrbitalGuard** simula uma ferramenta de resposta a esse cenário: permite cadastrar esses objetos, calcular riscos de colisão e reentrada, registrar eventos críticos e gerar um indicador geral de segurança orbital, o IPO — contribuindo para uma gestão orbital mais segura.
+O **OrbitalGuard** cadastra esses objetos, calcula o risco de colisão e reentrada de cada um, registra eventos ocorridos e consolida tudo em um indicador único de segurança orbital, o IPO.
 
-Desenvolvido como Global Solution da disciplina de Programação Orientada a Objetos — FIAP, Sistemas de Informação.
+Desenvolvido como Global Solution da disciplina de Programação Orientada a Objetos, no curso de Sistemas de Informação da FIAP.
 
 ---
 
@@ -16,7 +16,7 @@ Desenvolvido como Global Solution da disciplina de Programação Orientada a Obj
 
 ### 🛰️ Cadastro de Objetos Espaciais
 
-Cadastro de **Satélites Desativados** ou **Estágios de Foguete Abandonados**, cada um vinculado a uma organização responsável, com ID NORAD, nome, altitude e velocidade orbital.
+Cadastro de satélites desativados ou estágios de foguete abandonados, cada um vinculado a uma organização responsável, com ID NORAD, nome, altitude e velocidade orbital.
 
 ### ⚠️ Cálculo de Risco
 
@@ -38,11 +38,11 @@ Cadastro de **Satélites Desativados** ou **Estágios de Foguete Abandonados**, 
 
 ### 📋 Registro de Eventos
 
-Registro de ocorrências vinculadas a um objeto (tipo, descrição, data, hora e gravidade de 1 a 5), com identificação automática de eventos críticos (gravidade ≥ 4).
+Registro de ocorrências vinculadas a um objeto: tipo, descrição, data, hora e gravidade (1 a 5). Eventos com gravidade 4 ou 5 são marcados automaticamente como críticos.
 
 ### 📊 Índice de Proteção Orbital (IPO)
 
-Indicador geral calculado a partir do risco médio dos objetos cadastrados, da quantidade de objetos e do número de eventos críticos:
+Indicador geral, calculado a partir do risco médio dos objetos cadastrados, da quantidade de objetos e do número de eventos críticos:
 
 | IPO | Situação |
 |---|---|
@@ -52,17 +52,17 @@ Indicador geral calculado a partir do risco médio dos objetos cadastrados, da q
 
 ### 📄 Relatórios
 
-Relatório individual por objeto, listagem de eventos e relatório geral consolidando todos os dados do sistema.
+Relatório individual por objeto, listagem de eventos e um relatório geral com todos os dados do sistema.
 
 ---
 
 ## 🧠 Conceitos de POO Aplicados
 
-* **Abstração** — `ObjetoEspacial` (classe abstrata) define o comportamento comum a todos os objetos monitorados.
+* **Abstração** — `ObjetoEspacial` é uma classe abstrata e define o comportamento comum a todos os objetos monitorados.
 * **Herança** — `SateliteDesativado` e `EstagioFogueteAbandonado` estendem `ObjetoEspacial`.
-* **Polimorfismo** — objetos são manipulados por referência da classe base; `instanceof` com pattern matching trata as especializações quando necessário.
-* **Interfaces** — `StatusRelatorio` (geração de relatório) e `Manobravel` (capacidade de manobra) padronizam comportamentos entre classes não relacionadas por herança.
-* **Encapsulamento** — atributos privados/protegidos com acesso via getters.
+* **Polimorfismo** — os objetos são manipulados por referência da classe base; `instanceof` com pattern matching trata as especializações quando necessário.
+* **Interfaces** — `StatusRelatorio` e `Manobravel` padronizam comportamentos entre classes que não têm relação de herança entre si.
+* **Encapsulamento** — atributos privados ou protegidos, acessados por getters.
 
 ---
 
