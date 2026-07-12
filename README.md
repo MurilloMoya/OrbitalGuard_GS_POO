@@ -95,4 +95,4 @@ src/OrbitalGuard/
 
 ## 👤 Autor
 
-**Murillo Moya** — Sistemas de Informação, FIAP
+**Murillo Moya Martins** — Sistemas de Informação, FIAP
