@@ -15,18 +15,33 @@ Desenvolvido como Global Solution da disciplina de Programação Orientada a Obj
 ## 🚀 Funcionalidades
 
 ### 🛰️ Cadastro de Objetos Espaciais
+
 Cadastro de **Satélites Desativados** ou **Estágios de Foguete Abandonados**, cada um vinculado a uma organização responsável, com ID NORAD, nome, altitude e velocidade orbital.
 
 ### ⚠️ Cálculo de Risco
-| Tipo de objeto | Cálculos |
+
+**🛰️ Satélite Desativado**
+
+| Cálculo | O que mede |
 |---|---|
-| Satélite Desativado | Risco de colisão · Vida útil restante · Combustível disponível |
-| Estágio de Foguete Abandonado | Risco de colisão · Risco de reentrada · Combustível disponível |
+| Risco de colisão | Aumenta com o tempo de inatividade e o peso |
+| Vida útil restante | Diminui conforme os anos de inatividade e o peso |
+| Combustível disponível | Reduz com o tempo inativo, definindo se ainda pode manobrar |
+
+**🚀 Estágio de Foguete Abandonado**
+
+| Cálculo | O que mede |
+|---|---|
+| Risco de colisão | Aumenta com a massa e o tamanho |
+| Risco de reentrada | Baseado na massa e no tamanho do objeto |
+| Combustível disponível | Reduz conforme o tamanho, definindo se ainda pode manobrar |
 
 ### 📋 Registro de Eventos
+
 Registro de ocorrências vinculadas a um objeto (tipo, descrição, data, hora e gravidade de 1 a 5), com identificação automática de eventos críticos (gravidade ≥ 4).
 
 ### 📊 Índice de Proteção Orbital (IPO)
+
 Indicador geral calculado a partir do risco médio dos objetos cadastrados, da quantidade de objetos e do número de eventos críticos:
 
 | IPO | Situação |
@@ -36,6 +51,7 @@ Indicador geral calculado a partir do risco médio dos objetos cadastrados, da q
 | < 30 | 🔴 Vermelho |
 
 ### 📄 Relatórios
+
 Relatório individual por objeto, listagem de eventos e relatório geral consolidando todos os dados do sistema.
 
 ---
@@ -52,7 +68,7 @@ Relatório individual por objeto, listagem de eventos e relatório geral consoli
 
 ## 📂 Estrutura do Projeto
 
-\```text
+```text
 src/OrbitalGuard/
 ├── Classes/
 │   ├── ObjetoEspacial.java
@@ -68,7 +84,7 @@ src/OrbitalGuard/
 │   └── Util.java
 └── Main/
     └── Main.java
-\```
+```
 
 ## 💻 Tecnologias
 
@@ -79,4 +95,4 @@ src/OrbitalGuard/
 
 ## 👤 Autor
 
-**Murillo Moya Martins** — Sistemas de Informação, FIAP
+**Murillo Moya** — Sistemas de Informação, FIAP
